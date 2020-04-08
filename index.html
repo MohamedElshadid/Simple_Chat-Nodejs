@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <! — include bootstap and jquery cdn →
+</head>
+<body>
+  <!doctype html>
+  <html>
+    <head>
+      <title>chat</title>
+      <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font: 13px Helvetica, Arial; }
+        form { background: #000; padding: 3px; width: 29%; margin: auto;}
+        form input { border: 0; padding: 10px; margin-right: .5%;width:72% }
+        form button { width: 27%; background: rgb(93, 183, 211); border: none; padding: 10px; }
+        #messages { list-style-type: none; margin: 0; padding: 0; }
+        #messages li { padding: 5px 10px; color: cornsilk;font-size: 15px;font-weight: bold;}
+      </style>
+    </head>
+    <body>
+      <div style="width: 29%;height: 400px;background-color: #618590;margin: 20px auto; ">
+        <ul id="messages"></ul>
+      </div>
+      <!-- <div style="width: 10%; display: inline-block; background-color: cyan;height: 200px;" id="online"></div> -->
+      <form action="">
+        <input id="msg" autocomplete="off" placeholder="Enter Your Msg" /><button>Send</button>
+      </form>
+      <script src="/socket.io/socket.io.js"></script>
+      <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+      <script>
+        
+        $(function () {
+          var name = prompt("enter your name");
+            var socket = io();
+            $('form').submit(function(e){
+              e.preventDefault();
+              const msg = $('#msg').val();
+              if(msg == '')
+              {
+                alert("Enter Message");
+              }
+              else{
+                socket.emit('chat message', `${name} : ${msg}`);              
+              $('#msg').val('');
+              }
+
+            });
+            socket.on('chat message', function(msg,name){
+              $('#messages').append($('<li>').text(msg));
+                $('#online').append($('<h4>')).text(name);
+            });
+            
+          });
+
+      </script>
+    </body>
+  </html>
